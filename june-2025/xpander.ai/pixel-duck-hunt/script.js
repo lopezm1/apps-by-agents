@@ -11,6 +11,7 @@ document.addEventListener('mousemove', (e) => {
 });
 
 document.addEventListener('click', (e) => {
+  showShotAnimation(e.clientX, e.clientY);
   shootDuck(e.clientX, e.clientY);
 });
 
@@ -27,20 +28,32 @@ function shootDuck(x, y) {
   }
 }
 
+/**
+ * Displays a brief shot animation at the click location.
+ */
+function showShotAnimation(x, y) {
+  const shot = document.createElement('div');
+  shot.className = 'shot';
+  shot.style.left = x + 'px';
+  shot.style.top = y + 'px';
+  gameContainer.appendChild(shot);
+  setTimeout(() => shot.remove(), 500);
+}
+
 function createDuck() {
   const duck = document.createElement('div');
   duck.className = 'duck';
-  const y = Math.random() * (window.innerHeight - 32);
+  const y = Math.random() * (window.innerHeight - 64);
   const fromLeft = Math.random() < 0.5;
   if (fromLeft) {
-    duck.style.left = '-32px';
+    duck.style.left = '-64px';
   } else {
     duck.style.left = window.innerWidth + 'px';
   }
   duck.style.top = `${y}px`;
   gameContainer.appendChild(duck);
 
-  const endX = fromLeft ? window.innerWidth + 32 : -32;
+  const endX = fromLeft ? window.innerWidth + 64 : -64;
   const duration = 2000 + Math.random() * 2000;
   duck.animate(
     [
@@ -73,6 +86,24 @@ function gameOver() {
   gameContainer.appendChild(gameOverText);
 }
 
+// Before starting the game, show a running pixel-art man across the screen.
+function showRunningMan() {
+  return new Promise(resolve => {
+    const man = document.createElement('img');
+    man.id = 'running-man';
+    man.src = 'assets/sprites/man.png';
+    gameContainer.appendChild(man);
+    const duration = 3000;
+    man.animate([
+      { transform: 'translateX(-50px)' },
+      { transform: `translateX(${window.innerWidth + 50}px)` }
+    ], { duration: duration, easing: 'linear' }).onfinish = () => {
+      man.remove();
+      resolve();
+    };
+  });
+}
+
 window.onload = () => {
-  startGame();
+  showRunningMan().then(startGame);
 };
