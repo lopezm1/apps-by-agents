@@ -13,9 +13,9 @@ html, body {
 }
 .duck {
   position: absolute;
-  width: 32px;
-  height: 32px;
-  background: url('assets/images/duck.png') no-repeat center center;
+  width: 64px;
+  height: 64px;
+  background: url('assets/sprites/green-duck.png') no-repeat center center;
   background-size: contain;
 }
 #crosshair {
@@ -50,4 +50,30 @@ html, body {
   font-size: 48px;
   color: white;
   text-shadow: 2px 2px 4px black;
+}
+
+/* Shot animation effect */
+.shot {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid red;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: shot-anim 0.5s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes shot-anim {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  to { opacity: 0; transform: translate(-50%, -50%) scale(2); }
+}
+
+/* Running man pre-game animation */
+#running-man {
+  position: absolute;
+  bottom: 10px;
+  width: 64px;
+  height: 64px;
+  transform: translateX(-50px);
 }
